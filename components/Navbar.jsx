@@ -1,13 +1,15 @@
 // components/Navbar.jsx
 import { UserButton, SignedIn, SignedOut, SignInButton } from '@clerk/nextjs';
 import Link from 'next/link';
+import ThemeToggle from "./ThemeToggle"; // <--- Import
 
 export default function Navbar() {
   return (
     <nav className="flex justify-between items-center p-4 bg-gray-900 text-white shadow-md">
       <Link href="/" className="text-xl font-bold">ChatApp</Link>
 
-      <div>
+      <div className="flex items-center gap-4">
+        {/* <ThemeToggle />  */}
         <SignedOut>
           {/* Show this if user is NOT logged in */}
           <SignInButton mode="modal">

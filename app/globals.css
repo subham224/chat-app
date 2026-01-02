@@ -1,26 +1,99 @@
 @import "tailwindcss";
 
+/* =========================================
+   1. THEME VARIABLES (Colors & Glass)
+   ========================================= */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Light Mode (Peaceful Sky) */
+  --background: #f8fafc;
+  --foreground: #334155;
+  --card-bg: rgba(255, 255, 255, 0.6);
+  --card-border: rgba(255, 255, 255, 0.5);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+:root:has(.dark), .dark {
+  /* Dark Mode (Deep Space) */
+  --background: #0b1120;
+  --foreground: #e2e8f0;
+  --card-bg: rgba(15, 23, 42, 0.6);
+  --card-border: rgba(255, 255, 255, 0.1);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* =========================================
+   2. GLOBAL RESETS & SCROLLBAR HIDING
+   ========================================= */
+@layer base {
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    transition: background-color 0.5s ease, color 0.5s ease;
+    overflow-x: hidden; /* Prevent horizontal scroll */
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* NUCLEAR SCROLLBAR HIDE: Targets EVERYTHING */
+* {
+  -ms-overflow-style: none !important; /* IE and Edge */
+  scrollbar-width: none !important;    /* Firefox */
+}
+
+*::-webkit-scrollbar {
+  display: none !important; /* Chrome, Safari, Opera */
+}
+
+/* =========================================
+   3. STREAM CHAT OVERRIDES (3D Transparency)
+   ========================================= */
+:root {
+  --str-chat__background-color: transparent !important;
+  --str-chat__primary-surface-color: transparent !important;
+  --str-chat__active-primary-surface-color: rgba(59, 130, 246, 0.1) !important;
+  --str-chat__message-bubble-background-color: rgba(255, 255, 255, 0.85);
+  --str-chat__message-text-color: #1e293b;
+}
+
+:root:has(.dark), .dark {
+  --str-chat__message-bubble-background-color: rgba(255, 255, 255, 0.85);
+  --str-chat__primary-color: #60a5fa;
+  --str-chat__message-text-color: #f1f5f9;
+}
+
+.str-chat {
+  background: transparent !important;
+}
+
+.str-chat__header-livestream {
+  background: transparent !important;
+  border-bottom: 1px solid var(--card-border) !important;
+  box-shadow: none !important;
+}
+
+/* ... existing code ... */
+
+/* FIX: Force Chat to fill container and NOT grow */
+.str-chat,
+.str-chat__channel,
+.str-chat__main-panel {
+  height: 100% !important;
+  max-height: 100% !important;
+  min-height: 0 !important; /* Critical for Flexbox scrolling */
+  width: 100% !important;
+}
+
+/* FIX: Ensure the Main Panel uses Flexbox correctly */
+.str-chat__main-panel {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+/* FIX: The Message List should take all available space but SCROLL if needed */
+.str-chat__list {
+  flex: 1 1 0% !important; /* Grow to fill space, shrink if needed */
+  overflow-y: auto !important; /* Enable scrolling */
+  min-height: 0 !important;
+}
+
+/* FIX: Prevent Input from shrinking or disappearing */
+.str-chat__input-flat-wrapper {
+  flex-shrink: 0 !important; /* Never shrink */
 }
